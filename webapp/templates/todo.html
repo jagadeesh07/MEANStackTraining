@@ -1,0 +1,35 @@
+<div class="well" >
+	<h2>My TODO</h2>
+	<div class="row">
+		<div class="col-md-12" >
+			<label>
+			    Search Task: <input type="text"  ng-model="TodoCtrl.model.searchStr"   />
+			</label>
+		</div>
+	</div>
+	<table class="table table-bordered table-striped" >
+		<thead>
+		   <th class="text-center" >SL No.</th>		   
+		   <th class="text-center" >Task Name</th>		   
+		   <th class="text-center" >Status</th>		   
+		</thead>
+		<tbody>
+		    <tr ng-repeat="task in TodoCtrl.model.taskList  | filter:TodoCtrl.model.searchStr" >
+				<td>{{$index+1}}</td>
+				<td>{{task.taskName}}</td>
+				<td class="text-center" >
+				   <i class="glyphicon glyphicon-ok" ng-if="task.completed"  ></i>
+				   <button ng-if="!task.completed" class="btn btn-success" ng-click="TodoCtrl.completeTheTask(task)" >Complete</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="row">
+		<div class="col-md-12" >
+			<label>
+			    Create Task: <input type="text"  ng-model="TodoCtrl.model.taskName"   />
+			</label>
+			<button class="btn btn-primary" ng-click="TodoCtrl.createTask()"  >Create Task</button>
+		</div>
+	</div>
+</div>
