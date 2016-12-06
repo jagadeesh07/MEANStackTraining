@@ -17,6 +17,11 @@ MEANStack.config(function($routeProvider){
 		controller: 'TodoCtrl',
         controllerAs: 'TodoCtrl'
     })
+	.when('/components', {
+        templateUrl: 'templates/component.html',
+		controller: 'components',
+        controllerAs: 'components'
+    })
 	.otherwise({
         redirectTo: '/home'
     });
@@ -27,22 +32,33 @@ MEANStack.run(function(){
 });
 
 
-MEANStack.controller('HomeController',function(){
-    var vm=this;
+MEANStack.controller('HomeController',function(userprofile){
+    console.log("Initially user Name is : " + userprofile.getName("Jagadeesh"));
+    console.log("Initially user Name is : " + userprofile.name + " direct usage");
+	userprofile.setName("Jagadeesh");
+	console.log("Now user Name is : " + userprofile.getName("Jagadeesh"));
+	var vm=this;
 	vm.model={
 	    pageName:"Hello world."
 	}
 });
 
-MEANStack.controller('AboutController',function(){
+MEANStack.controller('AboutController',function(userprofile){
+	console.log("Initially user Name is : " + userprofile.getName("Jagadeesh"));
+	userprofile.setName("Jagadeesh1");
+	console.log("Now user Name is : " + userprofile.getName("Jagadeesh"));
+	
     var vm=this;
 	vm.model={
 	    pageName:"About US."
 	}
 });
 
-MEANStack.controller('TodoCtrl',function(){
-    var vm=this;
+MEANStack.controller('TodoCtrl',function(userprofile){
+    console.log("Initially user Name is : " + userprofile.getName("Jagadeesh"));
+	userprofile.setName("Jagadeesh 2");
+	console.log("Now user Name is : " + userprofile.getName("Jagadeesh"));
+	var vm=this;
 	vm.model={
 	   searchStr:"",
 	   taskList:[
@@ -62,7 +78,6 @@ MEANStack.controller('TodoCtrl',function(){
 	    vm.model.taskList.push({taskName:vm.model.taskName,completed:false})
 		vm.model.taskName="";
 	}
-	
 });
 
 MEANStack.controller('MenuCtrl',function(){
@@ -71,7 +86,29 @@ MEANStack.controller('MenuCtrl',function(){
 	   menuList:[
 	       {value:'home',label:"Home"},
 	       {value:'about',label:"About"},
-	       {value:'todo',label:"To Do"}
+	       {value:'todo',label:"To Do"},
+	       {value:'components',label:"Components"}
+	   ],
+	   selectedMenu:"home"
+	}
+	
+	vm.selectItem=function(menuItem){
+		vm.model.selectedMenu=menuItem.value;
+	}
+});
+
+MEANStack.controller('components',function(userprofile, $scope){
+    console.log("Initially user Name is : " + userprofile.getName("Jagadeesh"));
+	userprofile.setName("Jagadeesh 3");
+	console.log("Now user Name is : " + userprofile.getName("Jagadeesh"));
+	
+	var vm=this;
+	vm.model={
+	   menuList:[
+	       {value:'home',label:"Home"},
+	       {value:'about',label:"About"},
+	       {value:'todo',label:"To Do"},
+	       {value:'componentes',label:"Components"}
 	   ],
 	   selectedMenu:"home"
 	}
@@ -80,8 +117,63 @@ MEANStack.controller('MenuCtrl',function(){
 		vm.model.selectedMenu=menuItem.value;
 	}
 	
+	$scope.parentClick=function(){
+	    alert("Parent");
+	}
+	
+	$scope.childClick=function(){
+	    alert("Child");
+	}
 });
 
+
+MEANStack.directive('cfooter',function(){
+  return {
+     restrict:'AE',
+	 template:"This is a footer"
+  }
+});
+
+MEANStack.directive('spinner',function(){
+  return {
+     restrict:'AE',
+	 scope:{},
+	 templateUrl:"templates/spinner.html",
+	 controller:function($scope){
+		$scope.model={
+		   counter:0
+		}
+		
+		$scope.decrement=function(){
+		  $scope.model.counter--;
+		}
+		$scope.increment=function(){
+		  $scope.model.counter++;
+		}
+	 }
+  }
+});
+
+MEANStack.service('userprofile',function(){
+    this.setName=function(name){
+		this.name=name;
+	}
+	this.getName=function(){
+		return this.name;
+	}
+});
+
+MEANStack.factory('userprofilefactory',function(){
+    var name;
+	return {
+		setName:function(name){
+			name=name;
+		},
+		getName:function(name){
+			return name;
+		}
+	}
+});
 
 
 
